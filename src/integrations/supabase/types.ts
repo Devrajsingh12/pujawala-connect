@@ -14,7 +14,168 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bookings: {
+        Row: {
+          address: string
+          created_at: string | null
+          id: string
+          pandit_id: string
+          preferred_date: string
+          preferred_time: string
+          puja_type: string
+          special_requirements: string | null
+          status: string | null
+          total_amount: number | null
+          user_id: string
+        }
+        Insert: {
+          address: string
+          created_at?: string | null
+          id?: string
+          pandit_id: string
+          preferred_date: string
+          preferred_time: string
+          puja_type: string
+          special_requirements?: string | null
+          status?: string | null
+          total_amount?: number | null
+          user_id: string
+        }
+        Update: {
+          address?: string
+          created_at?: string | null
+          id?: string
+          pandit_id?: string
+          preferred_date?: string
+          preferred_time?: string
+          puja_type?: string
+          special_requirements?: string | null
+          status?: string | null
+          total_amount?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_pandit_id_fkey"
+            columns: ["pandit_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cart_items: {
+        Row: {
+          created_at: string | null
+          id: string
+          quantity: number | null
+          shop_item_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          quantity?: number | null
+          shop_item_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          quantity?: number | null
+          shop_item_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cart_items_shop_item_id_fkey"
+            columns: ["shop_item_id"]
+            isOneToOne: false
+            referencedRelation: "shop_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cart_items_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          address: string | null
+          created_at: string | null
+          email: string
+          experience_years: number | null
+          full_name: string
+          id: string
+          is_pandit: boolean | null
+          phone: string | null
+          rate_per_hour: number | null
+          specialization: string | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string | null
+          email: string
+          experience_years?: number | null
+          full_name: string
+          id: string
+          is_pandit?: boolean | null
+          phone?: string | null
+          rate_per_hour?: number | null
+          specialization?: string | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string | null
+          email?: string
+          experience_years?: number | null
+          full_name?: string
+          id?: string
+          is_pandit?: boolean | null
+          phone?: string | null
+          rate_per_hour?: number | null
+          specialization?: string | null
+        }
+        Relationships: []
+      }
+      shop_items: {
+        Row: {
+          created_at: string | null
+          description: string
+          id: string
+          image_url: string
+          name: string
+          price: number
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          id?: string
+          image_url: string
+          name: string
+          price: number
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          id?: string
+          image_url?: string
+          name?: string
+          price?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
