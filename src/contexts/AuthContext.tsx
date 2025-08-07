@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, Session } from '@supabase/supabase-js';
+import { User, Session, AuthError, PostgrestError } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
 interface Profile {
@@ -20,10 +20,10 @@ interface AuthContextType {
   session: Session | null;
   profile: Profile | null;
   loading: boolean;
-  signUp: (email: string, password: string, fullName: string, isPandit: boolean) => Promise<{ error: any }>;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, fullName: string, isPandit: boolean) => Promise<{ error: AuthError | null }>;
+  signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
-  updateProfile: (updates: Partial<Profile>) => Promise<{ error: any }>;
+  updateProfile: (updates: Partial<Profile>) => Promise<{ error: string | PostgrestError | null }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
