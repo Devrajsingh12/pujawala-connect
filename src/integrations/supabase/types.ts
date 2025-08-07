@@ -16,42 +16,33 @@ export type Database = {
     Tables: {
       bookings: {
         Row: {
-          address: string
+          additional_notes: string | null
+          ceremony_type: string
           created_at: string | null
+          date: string
           id: string
           pandit_id: string
-          preferred_date: string
-          preferred_time: string
-          puja_type: string
-          special_requirements: string | null
           status: string | null
-          total_amount: number | null
           user_id: string
         }
         Insert: {
-          address: string
+          additional_notes?: string | null
+          ceremony_type: string
           created_at?: string | null
+          date: string
           id?: string
           pandit_id: string
-          preferred_date: string
-          preferred_time: string
-          puja_type: string
-          special_requirements?: string | null
           status?: string | null
-          total_amount?: number | null
           user_id: string
         }
         Update: {
-          address?: string
+          additional_notes?: string | null
+          ceremony_type?: string
           created_at?: string | null
+          date?: string
           id?: string
           pandit_id?: string
-          preferred_date?: string
-          preferred_time?: string
-          puja_type?: string
-          special_requirements?: string | null
           status?: string | null
-          total_amount?: number | null
           user_id?: string
         }
         Relationships: [
@@ -73,34 +64,24 @@ export type Database = {
       }
       cart_items: {
         Row: {
-          created_at: string | null
           id: string
+          item_id: string
           quantity: number | null
-          shop_item_id: string
           user_id: string
         }
         Insert: {
-          created_at?: string | null
           id?: string
+          item_id: string
           quantity?: number | null
-          shop_item_id: string
           user_id: string
         }
         Update: {
-          created_at?: string | null
           id?: string
+          item_id?: string
           quantity?: number | null
-          shop_item_id?: string
           user_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "cart_items_shop_item_id_fkey"
-            columns: ["shop_item_id"]
-            isOneToOne: false
-            referencedRelation: "shop_items"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "cart_items_user_id_fkey"
             columns: ["user_id"]
@@ -112,67 +93,67 @@ export type Database = {
       }
       profiles: {
         Row: {
-          address: string | null
           created_at: string | null
           email: string
-          experience_years: number | null
+          experience: number | null
           full_name: string
           id: string
-          is_pandit: boolean | null
-          phone: string | null
-          rate_per_hour: number | null
+          location: string | null
+          profile_pic_url: string | null
+          rate_per_ceremony: number | null
           specialization: string | null
+          user_type: string
         }
         Insert: {
-          address?: string | null
           created_at?: string | null
           email: string
-          experience_years?: number | null
+          experience?: number | null
           full_name: string
           id: string
-          is_pandit?: boolean | null
-          phone?: string | null
-          rate_per_hour?: number | null
+          location?: string | null
+          profile_pic_url?: string | null
+          rate_per_ceremony?: number | null
           specialization?: string | null
+          user_type: string
         }
         Update: {
-          address?: string | null
           created_at?: string | null
           email?: string
-          experience_years?: number | null
+          experience?: number | null
           full_name?: string
           id?: string
-          is_pandit?: boolean | null
-          phone?: string | null
-          rate_per_hour?: number | null
+          location?: string | null
+          profile_pic_url?: string | null
+          rate_per_ceremony?: number | null
           specialization?: string | null
+          user_type?: string
         }
         Relationships: []
       }
       shop_items: {
         Row: {
-          created_at: string | null
           description: string
           id: string
           image_url: string
-          name: string
           price: number
+          stock: number | null
+          title: string
         }
         Insert: {
-          created_at?: string | null
           description: string
           id?: string
           image_url: string
-          name: string
           price: number
+          stock?: number | null
+          title: string
         }
         Update: {
-          created_at?: string | null
           description?: string
           id?: string
           image_url?: string
-          name?: string
           price?: number
+          stock?: number | null
+          title?: string
         }
         Relationships: []
       }

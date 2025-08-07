@@ -6,12 +6,12 @@ interface Profile {
   id: string;
   email: string;
   full_name: string;
-  is_pandit: boolean;
-  phone?: string;
-  address?: string;
+  user_type: 'user' | 'pandit';
   specialization?: string;
-  experience_years?: number;
-  rate_per_hour?: number;
+  experience?: number;
+  location?: string;
+  rate_per_ceremony?: number;
+  profile_pic_url?: string;
   created_at: string;
 }
 
@@ -55,7 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      setProfile(data);
+      setProfile(data as Profile);
     } catch (error) {
       console.error('Error fetching profile:', error);
     }
@@ -108,7 +108,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         emailRedirectTo: redirectUrl,
         data: {
           full_name: fullName,
-          is_pandit: isPandit
+          user_type: isPandit ? 'pandit' : 'user'
         }
       }
     });

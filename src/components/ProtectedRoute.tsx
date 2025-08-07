@@ -19,12 +19,12 @@ export function ProtectedRoute({ children, requirePandit = false, requireUser = 
         return;
       }
 
-      if (requirePandit && profile && !profile.is_pandit) {
+      if (requirePandit && profile && profile.user_type !== 'pandit') {
         navigate('/dashboard');
         return;
       }
 
-      if (requireUser && profile && profile.is_pandit) {
+      if (requireUser && profile && profile.user_type === 'pandit') {
         navigate('/pandit-dashboard');
         return;
       }
@@ -43,11 +43,11 @@ export function ProtectedRoute({ children, requirePandit = false, requireUser = 
     return null;
   }
 
-  if (requirePandit && profile && !profile.is_pandit) {
+  if (requirePandit && profile && profile.user_type !== 'pandit') {
     return null;
   }
 
-  if (requireUser && profile && profile.is_pandit) {
+  if (requireUser && profile && profile.user_type === 'pandit') {
     return null;
   }
 

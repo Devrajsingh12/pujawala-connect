@@ -37,7 +37,7 @@ export function Navigation() {
           <div className="hidden md:flex items-center space-x-6">
             {user ? (
               <>
-                {profile?.is_pandit ? (
+            {profile?.user_type === 'pandit' ? (
                   <>
                     <Link to="/pandit-dashboard" className="text-muted-foreground hover:text-primary transition-colors">
                       Dashboard
@@ -74,7 +74,7 @@ export function Navigation() {
                       {profile?.full_name || 'User'}
                     </DropdownMenuItem>
                     <DropdownMenuItem className="text-sm text-muted-foreground">
-                      {profile?.is_pandit ? 'Pandit' : 'User'}
+                      {profile?.user_type === 'pandit' ? 'Pandit' : 'User'}
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut}>
@@ -114,7 +114,7 @@ export function Navigation() {
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-border">
               {user ? (
                 <>
-                  {profile?.is_pandit ? (
+                  {profile?.user_type === 'pandit' ? (
                     <Link
                       to="/pandit-dashboard"
                       className="block px-3 py-2 text-muted-foreground hover:text-primary transition-colors"
@@ -157,7 +157,7 @@ export function Navigation() {
                   <div className="border-t border-border pt-4 pb-3">
                     <div className="px-3 py-2">
                       <div className="text-base font-medium">{profile?.full_name || 'User'}</div>
-                      <div className="text-sm text-muted-foreground">{profile?.is_pandit ? 'Pandit' : 'User'}</div>
+                      <div className="text-sm text-muted-foreground">{profile?.user_type === 'pandit' ? 'Pandit' : 'User'}</div>
                     </div>
                     <Button 
                       variant="ghost" 
