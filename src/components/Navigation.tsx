@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, ShoppingCart, User, LogOut } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,10 +13,75 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
+interface CartItem {
+  id: string;
+  quantity: number;
+  shop_item: {
+    id: string;
+    name: string;
+    price: number;
+  };
+}
+
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartTotal, setCartTotal] = useState(0);
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
+
+  const fetchCartItems = useCallback(async () => {
+    if (!user) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('cart_items')
+        .select(`
+          *,
+          shop_item:shop_items(*)
+        `)
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+      
+      setCartItems(data || []);
+      
+      // Calculate total
+      const total = (data || []).reduce((sum, item) => {
+        return sum + (item.shop_item.price * item.quantity);
+      }, 0);
+      setCartTotal(total);
+      
+    } catch (error) {
+      console.error('Error fetching cart items:', error);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
+      fetchCartItems();
+      
+      // Set up real-time subscription for cart updates
+      const cartSubscription = supabase
+        .channel('cart_changes')
+        .on('postgres_changes', {
+          event: '*',
+          schema: 'public',
+          table: 'cart_items',
+          filter: `user_id=eq.${user.id}`
+        }, () => {
+          fetchCartItems();
+        })
+        .subscribe();
+
+      return () => {
+        cartSubscription.unsubscribe();
+      };
+    } else {
+      setCartItems([]);
+      setCartTotal(0);
+    }
+  }, [user, fetchCartItems]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -57,9 +124,23 @@ export function Navigation() {
                     <Link to="/bookings" className="text-muted-foreground hover:text-primary transition-colors">
                       My Bookings
                     </Link>
-                    <Button variant="ghost" size="icon" className="relative">
-                      <ShoppingCart className="h-5 w-5" />
-                    </Button>
+                    <Link to="/shop">
+                      <Button variant="ghost" size="icon" className="relative">
+                        <ShoppingCart className="h-5 w-5" />
+                        {cartItems.length > 0 && (
+                          <Badge 
+                            className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 flex items-center justify-center text-xs bg-primary text-primary-foreground"
+                          >
+                            {cartItems.length}
+                          </Badge>
+                        )}
+                      </Button>
+                    </Link>
+                    {cartTotal > 0 && (
+                      <div className="text-sm font-semibold text-primary">
+                        ₹{cartTotal.toFixed(0)}
+                      </div>
+                    )}
                   </>
                 )}
                 
